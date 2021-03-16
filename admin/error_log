@@ -1,0 +1,60 @@
+[16-Mar-2021 08:11:02 UTC] PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting function (T_FUNCTION) or const (T_CONST) in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 4
+[16-Mar-2021 08:11:07 UTC] PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting function (T_FUNCTION) or const (T_CONST) in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 4
+[16-Mar-2021 08:11:08 UTC] PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting function (T_FUNCTION) or const (T_CONST) in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 4
+[16-Mar-2021 08:11:15 UTC] PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting function (T_FUNCTION) or const (T_CONST) in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 4
+[16-Mar-2021 08:12:43 UTC] PHP Parse error:  syntax error, unexpected 'array' (T_ARRAY), expecting function (T_FUNCTION) or const (T_CONST) in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 4
+[16-Mar-2021 09:39:41 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 792
+[16-Mar-2021 09:40:32 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 792
+[16-Mar-2021 09:40:34 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 792
+[16-Mar-2021 09:40:41 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 792
+[16-Mar-2021 09:41:02 UTC] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /home/echoibkf/public_html/opencart/admin/controller/customer/customer.php on line 792
+[16-Mar-2021 10:40:03 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getTotalPurchased() on null in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php:208
+Stack trace:
+#0 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerExtensionReportProductPurchased->customer_invoice()
+#1 /home/echoibkf/public_html/opencart/admin/controller/startup/router.php(26): Action->execute(Object(Registry), Array)
+#2 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerStartupRouter->index()
+#3 /home/echoibkf/public_html/opencart/system/engine/router.php(67): Action->execute(Object(Registry))
+#4 /home/echoibkf/public_html/opencart/system/engine/router.php(56): Router->execute(Object(Action))
+#5 /home/echoibkf/public_html/opencart/system/framework.php(169): Router->dispatch(Object(Action), Object(Action))
+#6 /home/echoibkf/public_html/opencart/system/startup.php(104): require_once('/home/echoibkf/...')
+#7 /home/echoibkf/public_html/opencart/adm in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php on line 208
+[16-Mar-2021 10:42:01 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getTotalPurchased() on null in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php:208
+Stack trace:
+#0 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerExtensionReportProductPurchased->customer_invoice()
+#1 /home/echoibkf/public_html/opencart/admin/controller/startup/router.php(26): Action->execute(Object(Registry), Array)
+#2 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerStartupRouter->index()
+#3 /home/echoibkf/public_html/opencart/system/engine/router.php(67): Action->execute(Object(Registry))
+#4 /home/echoibkf/public_html/opencart/system/engine/router.php(56): Router->execute(Object(Action))
+#5 /home/echoibkf/public_html/opencart/system/framework.php(169): Router->dispatch(Object(Action), Object(Action))
+#6 /home/echoibkf/public_html/opencart/system/startup.php(104): require_once('/home/echoibkf/...')
+#7 /home/echoibkf/public_html/opencart/adm in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php on line 208
+[16-Mar-2021 10:59:49 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getTotalPurchased() on null in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php:208
+Stack trace:
+#0 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerExtensionReportProductPurchased->customer_invoice()
+#1 /home/echoibkf/public_html/opencart/admin/controller/startup/router.php(26): Action->execute(Object(Registry), Array)
+#2 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerStartupRouter->index()
+#3 /home/echoibkf/public_html/opencart/system/engine/router.php(67): Action->execute(Object(Registry))
+#4 /home/echoibkf/public_html/opencart/system/engine/router.php(56): Router->execute(Object(Action))
+#5 /home/echoibkf/public_html/opencart/system/framework.php(169): Router->dispatch(Object(Action), Object(Action))
+#6 /home/echoibkf/public_html/opencart/system/startup.php(104): require_once('/home/echoibkf/...')
+#7 /home/echoibkf/public_html/opencart/adm in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php on line 208
+[16-Mar-2021 11:00:59 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getTotalPurchased() on null in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php:209
+Stack trace:
+#0 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerExtensionReportProductPurchased->customer_invoice()
+#1 /home/echoibkf/public_html/opencart/admin/controller/startup/router.php(26): Action->execute(Object(Registry), Array)
+#2 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerStartupRouter->index()
+#3 /home/echoibkf/public_html/opencart/system/engine/router.php(67): Action->execute(Object(Registry))
+#4 /home/echoibkf/public_html/opencart/system/engine/router.php(56): Router->execute(Object(Action))
+#5 /home/echoibkf/public_html/opencart/system/framework.php(169): Router->dispatch(Object(Action), Object(Action))
+#6 /home/echoibkf/public_html/opencart/system/startup.php(104): require_once('/home/echoibkf/...')
+#7 /home/echoibkf/public_html/opencart/adm in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php on line 209
+[16-Mar-2021 11:01:24 UTC] PHP Fatal error:  Uncaught Error: Call to a member function getTotalPurchased() on null in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php:209
+Stack trace:
+#0 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerExtensionReportProductPurchased->customer_invoice()
+#1 /home/echoibkf/public_html/opencart/admin/controller/startup/router.php(26): Action->execute(Object(Registry), Array)
+#2 /home/echoibkf/public_html/ocstorage/modification/system/engine/action.php(79): ControllerStartupRouter->index()
+#3 /home/echoibkf/public_html/opencart/system/engine/router.php(67): Action->execute(Object(Registry))
+#4 /home/echoibkf/public_html/opencart/system/engine/router.php(56): Router->execute(Object(Action))
+#5 /home/echoibkf/public_html/opencart/system/framework.php(169): Router->dispatch(Object(Action), Object(Action))
+#6 /home/echoibkf/public_html/opencart/system/startup.php(104): require_once('/home/echoibkf/...')
+#7 /home/echoibkf/public_html/opencart/adm in /home/echoibkf/public_html/opencart/admin/controller/extension/report/product_purchased.php on line 209
