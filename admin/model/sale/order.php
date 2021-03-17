@@ -1,7 +1,7 @@
 <?php
 class ModelSaleOrder extends Model {
 	public function getOrder($order_id) {
-		$order_query = $this->db->query("SELECT *, (SELECT CONCAT(c.firstname, ' ', c.lastname) FROM " . DB_PREFIX . "customer c WHERE c.customer_id = o.customer_id) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status FROM `" . DB_PREFIX . "order` o WHERE o.order_id = '" . (int)$order_id . "'");
+		$order_query = $this->db->query("SELECT *, (SELECT c.gst FROM " . DB_PREFIX . "customer c WHERE c.customer_id = o.customer_id) AS payment_gst, (SELECT CONCAT(c.firstname, ' ', c.lastname) FROM " . DB_PREFIX . "customer c WHERE c.customer_id = o.customer_id) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status FROM `" . DB_PREFIX . "order` o WHERE o.order_id = '" . (int)$order_id . "'");
 
 		if ($order_query->num_rows) {
 			$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$order_query->row['payment_country_id'] . "'");
@@ -94,6 +94,7 @@ class ModelSaleOrder extends Model {
 				'payment_city'            => $order_query->row['payment_city'],
 				'payment_zone_id'         => $order_query->row['payment_zone_id'],
 				'payment_zone'            => $order_query->row['payment_zone'],
+                                'payment_gst'             => $order_query->row['payment_gst'],
 				'payment_zone_code'       => $payment_zone_code,
 				'payment_country_id'      => $order_query->row['payment_country_id'],
 				'payment_country'         => $order_query->row['payment_country'],
@@ -140,7 +141,11 @@ class ModelSaleOrder extends Model {
 				'user_agent'              => $order_query->row['user_agent'],
 				'accept_language'         => $order_query->row['accept_language'],
 				'date_added'              => $order_query->row['date_added'],
-				'date_modified'           => $order_query->row['date_modified']
+				'date_modified'           => $order_query->row['date_modified'],
+                                'conversion_rate'         => $order_query->row['conversion_rate'],
+				'cutoff_rate'             => $order_query->row['cutoff_rate'],
+                                'invoice_for'             => $order_query->row['invoice_for'],
+                                'payment_date'            => $order_query->row['payment_date'],
 			);
 		} else {
 			return;
@@ -474,5 +479,11 @@ class ModelSaleOrder extends Model {
 		$query = $this->db->query("SELECT COUNT(DISTINCT email) AS total FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "order_product op ON (o.order_id = op.order_id) WHERE (" . implode(" OR ", $implode) . ") AND o.order_status_id <> '0'");
 
 		return $query->row['total'];
+	}
+        
+        public function saveConversionCutoffRate($data, $order_id) {
+
+           $query = $this->db->query("UPDATE `" . DB_PREFIX . "order` SET conversion_rate = '" . $this->db->escape($data['conversion_rate']) . "', cutoff_rate = '" . $this->db->escape($data['cutoff_rate']) . "', invoice_for = '" . $this->db->escape($data['invoice_for']) . "', payment_date = '" . $this->db->escape($data['payment_date']) . "' WHERE order_id = '". $order_id ."'");
+            
 	}
 }

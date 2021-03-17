@@ -711,6 +711,8 @@ class ControllerSaleOrder extends Controller {
 	public function info() {
 		$this->load->model('sale/order');
 
+                $data['base_admin'] = HTTP_SERVER;
+                
 		if (isset($this->request->get['order_id'])) {
 			$order_id = $this->request->get['order_id'];
 		} else {
@@ -792,7 +794,11 @@ class ControllerSaleOrder extends Controller {
 
 			$data['store_id'] = $order_info['store_id'];
 			$data['store_name'] = $order_info['store_name'];
-			
+			$data['conversion_rate'] = $order_info['conversion_rate'];
+                        $data['cutoff_rate'] = $order_info['cutoff_rate'];
+                        $data['payment_date'] = $order_info['payment_date'];
+                        $data['invoice_for'] = $order_info['invoice_for'];
+                        
 			if ($order_info['store_id'] == 0) {
 				$data['store_url'] = $this->request->server['HTTPS'] ? HTTPS_CATALOG : HTTP_CATALOG;
 			} else {
@@ -1499,12 +1505,12 @@ class ControllerSaleOrder extends Controller {
 					$store_address = $store_info['config_address'];
 					$store_email = $store_info['config_email'];
 					$store_telephone = $store_info['config_telephone'];
-					$store_fax = $store_info['config_fax'];
+					$store_gstn = $store_info['config_fax'];
 				} else {
 					$store_address = $this->config->get('config_address');
 					$store_email = $this->config->get('config_email');
 					$store_telephone = $this->config->get('config_telephone');
-					$store_fax = $this->config->get('config_fax');
+					$store_gstn = $this->config->get('config_fax');
 				}
 
 				if ($order_info['invoice_no']) {
@@ -1587,6 +1593,7 @@ class ControllerSaleOrder extends Controller {
 
 				$products = $this->model_sale_order->getOrderProducts($order_id);
 
+                                $count = 1;
 				foreach ($products as $product) {
 					$option_data = array();
 
@@ -1614,11 +1621,13 @@ class ControllerSaleOrder extends Controller {
 					$product_data[] = array(
 						'name'     => $product['name'],
 						'model'    => $product['model'],
+                                                's_no'     => $count,
 						'option'   => $option_data,
 						'quantity' => $product['quantity'],
 						'price'    => $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']),
 						'total'    => $this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value'])
 					);
+                                        $count++;
 				}
 
 				$voucher_data = array();
@@ -1642,26 +1651,37 @@ class ControllerSaleOrder extends Controller {
 						'text'  => $this->currency->format($total['value'], $order_info['currency_code'], $order_info['currency_value'])
 					);
 				}
-
+                                
+                                $amount_in_words =  $this->getIndianCurrency((float)$this->currency->format($order_info['total'], $order_info['currency_code'], false, false), $order_info['currency_code'], 'Total Invoice Value').' Only';
+                                $invoice_for = date('M Y', $order_info['invoice_for']);
+                                $invoice_date = date('d M Y', strtotime($order_info['date_added']));
+                                
 				$data['orders'][] = array(
 					'order_id'	       => $order_id,
 					'invoice_no'       => $invoice_no,
+                                        'invoice_for'      => $invoice_for,
+                                        'invoice_date'     => $invoice_date,
 					'date_added'       => date($this->language->get('date_format_short'), strtotime($order_info['date_added'])),
 					'store_name'       => $order_info['store_name'],
 					'store_url'        => rtrim($order_info['store_url'], '/'),
 					'store_address'    => nl2br($store_address),
 					'store_email'      => $store_email,
 					'store_telephone'  => $store_telephone,
-					'store_fax'        => $store_fax,
+					'store_gstn'        => $store_gstn,
 					'email'            => $order_info['email'],
 					'telephone'        => $order_info['telephone'],
 					'shipping_address' => $shipping_address,
 					'shipping_method'  => $order_info['shipping_method'],
 					'payment_address'  => $payment_address,
 					'payment_method'   => $order_info['payment_method'],
+                                        'payment_company'  => $order_info['payment_company'],
+                                        'payment_zone_id'  => $order_info['payment_zone_id'],
+                                        'payment_zone'     => $order_info['payment_zone'],
+                                        'payment_gst'      => $order_info['payment_gst'],
 					'product'          => $product_data,
 					'voucher'          => $voucher_data,
 					'total'            => $total_data,
+                                        'amount_in_words'  => $amount_in_words,
 					'comment'          => nl2br($order_info['comment'])
 				);
 			}
@@ -1840,4 +1860,92 @@ class ControllerSaleOrder extends Controller {
 
 		$this->response->setOutput($this->load->view('sale/order_shipping', $data));
 	}
+        
+        public function saveConversionCutoffRate(){
+            
+                   $this->load->model('sale/order');
+                   $this->model_sale_order->saveConversionCutoffRate($this->request->post, $this->request->get['order_id']);
+                   
+                   $json['success'] = ' Success: You have modified conversion rate, cutoff date and invoice for!';
+                   $this->response->setOutput(json_encode($json));
+        }
+        
+    function getIndianCurrency($number, $currency_code, $prefix_text)
+
+    {
+
+
+
+        $decimal = round($number - ($no = floor($number)), 2) * 100;
+
+        $hundred = null;
+
+        $digits_length = strlen($no);
+
+        $i = 0;
+
+        $str = array();
+
+        $words = array(
+            0 => 'Zero', 1 => 'One', 2 => 'Two',
+
+            3 => 'Three', 4 => 'Four', 5 => 'Five', 6 => 'Six',
+
+            7 => 'Seven', 8 => 'Eight', 9 => 'Nine',
+
+            10 => 'Ten', 11 => 'Eleven', 12 => 'Twelve',
+
+            13 => 'Thirteen', 14 => 'Fourteen', 15 => 'Fifteen',
+
+            16 => 'Sixteen', 17 => 'Seventeen', 18 => 'Eighteen',
+
+            19 => 'Nineteen', 20 => 'Twenty', 30 => 'Thirty',
+
+            40 => 'Forty', 50 => 'Fifty', 60 => 'Sixty',
+
+            70 => 'Seventy', 80 => 'Eighty', 90 => 'Ninety'
+        );
+
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+
+
+
+        while ($i < $digits_length) {
+
+            $divider = ($i == 2) ? 10 : 100;
+
+            $number = floor($no % $divider);
+
+            $no = floor($no / $divider);
+
+            $i += $divider == 10 ? 1 : 2;
+
+            if ($number) {
+
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+
+                $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+
+                $str[] = ($number < 21) ? $words[$number] . ' ' . $digits[$counter] . $plural . ' ' . $hundred : $words[floor($number / 10) * 10] . ' ' . ($words[$number % 10]=='Zero'?'':$words[$number % 10]) . ' ' . $digits[$counter] . $plural . ' ' . $hundred;
+            } else $str[] = null;
+        }
+
+        if ($currency_code == 'INR') {
+
+            $currency_unit = '';
+
+            $cents = 'Paise Only';
+        } else {
+
+            $currency_unit = $currency_code;
+
+            $cents = 'Cents';
+        }
+
+        $Rupees = implode('', array_reverse($str));
+
+        $cents = ($decimal > 0) ? " and " . ($words[floor($decimal / 10) * 10] . " " . $words[$decimal % 10]) . ' ' . $cents : '';
+
+        return ($Rupees ? $prefix_text . ' (' . $currency_code . '): ' . $Rupees . $currency_unit : '') . $cents;
+    }
 }

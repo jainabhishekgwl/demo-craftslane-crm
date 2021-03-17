@@ -74,7 +74,7 @@ class ModelExtensionReportProduct extends Model {
         
         public function getInvoicePurchased(array $data = []): array {
             
-		$sql = "SELECT c.firstname, c.lastname, c.company, c.gst, o.date_added, op.`name`, op.`model`, SUM(op.`quantity`) AS quantity, SUM((op.`price` + op.`tax`) * op.`quantity`) AS `total` FROM `" . DB_PREFIX . "order_product` op LEFT JOIN `" . DB_PREFIX . "order` o ON (op.`order_id` = o.`order_id`) LEFT JOIN `" . DB_PREFIX . "customer` c ON (o.`customer_id` = c.`customer_id`)";
+		$sql = "SELECT c.*, o.*, op.`name`, op.`model`, op.tax, SUM(op.`quantity`) AS quantity,op.`price`, SUM((op.`price`) * op.`quantity`) AS `total` FROM `" . DB_PREFIX . "order_product` op LEFT JOIN `" . DB_PREFIX . "order` o ON (op.`order_id` = o.`order_id`) LEFT JOIN `" . DB_PREFIX . "customer` c ON (o.`customer_id` = c.`customer_id`)";
                
 		if (!empty($data['filter_order_status_id'])) {
 			$sql .= " WHERE o.`order_status_id` = '" . (int)$data['filter_order_status_id'] . "'";
@@ -130,4 +130,13 @@ class ModelExtensionReportProduct extends Model {
 
 		return $query->row['total'];
 	}
+        
+        public function getTax($order_id){
+            
+            $sql = "SELECT * FROM `" . DB_PREFIX . "order_total` where order_id='". $order_id ."'";
+            
+            $query = $this->db->query($sql);
+            
+            return $query->rows;
+        }
 }

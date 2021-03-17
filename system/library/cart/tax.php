@@ -125,4 +125,21 @@ final class Tax {
 
 		return $tax_rate_data;
 	}
+        
+        public function getTaxName($tax_rate_id)
+        {
+
+            $tax_query = $this->db->query("SELECT title FROM " . DB_PREFIX . "tax_class WHERE tax_class_id = '" . (int) $tax_rate_id . "'");
+
+            if ($tax_query->num_rows) {
+
+                return $tax_query->row['title'];
+
+            } else {
+
+                return false;
+
+            }
+
+        }
 }

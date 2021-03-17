@@ -43,6 +43,8 @@ $_['column_bank']               = 'Bank';
 $_['column_acc_name']           = 'Acc Name';
 $_['column_transaction']        = 'Transaction';
 $_['column_part_of_income']     = 'Part of Income';
+$_['column_invoice_number']     = 'Inv No.';
+
 
 
 

@@ -60,6 +60,7 @@ $_['text_commission_removed']    = 'Success: Commission removed!';
 $_['text_restock']               = 'Success: Products have been restocked!';
 $_['text_upload']                = 'Your file was successfully uploaded!';
 $_['text_picklist']              = 'Dispatch Note';
+$_['text_conversion_cutoff']     = 'Add Conversion Rate, Cutoff Rate and Invoice For';
 
 // Column
 $_['column_order_id']            = 'Order ID';
@@ -121,6 +122,10 @@ $_['entry_order_id']             = 'Order ID';
 $_['entry_total']                = 'Total';
 $_['entry_date_added']           = 'Date Added';
 $_['entry_date_modified']        = 'Date Modified';
+$_['entry_conversion_rate']      = 'Conversion Rate';
+$_['entry_cutoff_rate']          = 'Cutoff Rate';
+$_['entry_invoice_for']          = 'Invoice For';
+$_['entry_payment_date']         = 'Payment Date';
 
 // Help
 $_['help_override']              = 'If the customers order is being blocked from changing the order status due to an anti-fraud extension enable override.';

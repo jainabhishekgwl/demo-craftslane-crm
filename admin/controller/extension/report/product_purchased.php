@@ -209,9 +209,25 @@ class ControllerExtensionReportProductPurchased extends Controller {
 		$product_total = $this->model_extension_report_product->getTotalPurchased($filter_data);
 
 		$results = $this->model_extension_report_product->getInvoicePurchased($filter_data);
+//                echo '<pre>'; print_r($results); die;
 		foreach ($results as $result) {
+                        $taxes = $this->model_extension_report_product->getTax($result['order_id']);
+                        
+                        $tax_IGST = '';
+                        $tax_CGST = '';
+                        $tax_SGST = '';
+                        
+                        foreach ($taxes as $tax){
+                            if (strpos($tax['title'], 'CGST') !== false) {
+                                $tax_CGST = $tax['value'];
+                            }else if(strpos($tax['title'], 'SGST') !== false){
+                                $tax_SGST = $tax['value'];
+                            }else if(strpos($tax['title'], 'IGST') !== false){
+                                $tax_IGST = $tax['value'];
+                            }
+                        }
+                        
                         $order_date = date_parse($result['date_added']);
-
                         $monthNum = sprintf("%02s", $order_date["month"]);
                         $monthName = date("M", strtotime($monthNum));
                         $invoice_date = date("d-M-y", strtotime($result['date_added']));
@@ -219,20 +235,67 @@ class ControllerExtensionReportProductPurchased extends Controller {
                         $customer_name = $result['firstname'].' '.$result['lastname'];
                         $company = $result['company'];
                         $gst = $result['gst'];
+                        
+                        
+                        if($result['currency_code'] == 'INR'){
+                            
+                            $result['conversion_rate'] = '';
+                            $transfer_currency_amount = '';
+                            $base_usd = '';
+                            $total_amount = $this->currency->format($result['total'], $this->config->get('config_currency'));
+                            $cutoff_rate = '';
+                            
+                        }else{
+                            
+                            $transfer_currency_amount = $this->currency->format($result['total'], $this->config->get('config_currency'));
+                            if(!empty($result['conversion_rate'])){
+                                $total_amount = $result['total']*$result['conversion_rate'];
+                            }else{
+                                $total_amount = '';
+                            }
+                            
+                            $cutoff_rate =  !empty($result['cutoff_rate'])?'-'.$result['cutoff_rate']:$result['cutoff_rate'];
+                            $base_usd = $result['total']-$cutoff_rate;
+                            $base_usd =  $this->currency->format($base_usd, $this->config->get('config_currency'));
+                        }
+                        
+                        if($result['payment_method'] == 'Bank Transfer'){
+                            $bank_name = 'HDFC';
+                        }else{
+                            $bank_name = '';
+                        }
+                        $acc_name = $this->config->get('config_name');
                     
 			$data['products'][] = [
 				'name'            => $result['name'],
                                 'month'           => $monthName,
                                 'year'            => $year,
                                 'invoice_date'    => $invoice_date,
+                                'invoice_no'      => $result['invoice_prefix'].$result['invoice_no'],
                                 'customer_name'   => $customer_name,
                                 'company'         => $company,
                                 'gst'             => $gst,
+                                'igst'            => !empty($tax_IGST)?$tax_IGST:'',
+                                'cgst'            => !empty($tax_CGST)?$tax_CGST:'',
+                                'sgst'            => !empty($tax_SGST)?$tax_SGST:'',
 				'model'           => $result['model'],
 				'quantity'        => $result['quantity'],
-				'total'           => $this->currency->format($result['total'], $this->config->get('config_currency'))
+                                'currency'        => $result['currency_code'],
+                                'exch_rate'       => $result['conversion_rate'],
+			 	'transfer_total'  => $transfer_currency_amount,
+                                'total'           => $total_amount,
+                                'total_with_tax'  => $this->currency->format(($result['price']+$result['tax'])*$result['quantity'], $this->config->get('config_currency')),
+                                'cutoff_rate'     => $cutoff_rate,
+                                'base_usd'        => $base_usd,
+                                'payment_date'    => $invoice_date,
+                                'part_of_inc'     => 'Yes',
+                                'transaction'     => '',
+                                'acc_name'        => $acc_name,
+                                'bank_name'       => $bank_name,
+                                'payment_method'  => $result['payment_method'],
 			];
 		}
+                
 
 		$data['user_token'] = $this->session->data['user_token'];
 
