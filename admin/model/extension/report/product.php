@@ -53,7 +53,7 @@ class ModelExtensionReportProduct extends Model {
 			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
 		}
 
-		$sql .= " GROUP BY op.product_id ORDER BY total DESC";
+		$sql .= " GROUP BY o.order_id ORDER BY total DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
@@ -90,7 +90,7 @@ class ModelExtensionReportProduct extends Model {
 			$sql .= " AND DATE(o.`date_added`) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
 		}
 
-		$sql .= " GROUP BY op.`product_id` ORDER BY total DESC";
+		$sql .= " GROUP BY o.`order_id` ORDER BY total DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {

@@ -209,21 +209,21 @@ class ControllerExtensionReportProductPurchased extends Controller {
 		$product_total = $this->model_extension_report_product->getTotalPurchased($filter_data);
 
 		$results = $this->model_extension_report_product->getInvoicePurchased($filter_data);
-//                echo '<pre>'; print_r($results); die;
+                
 		foreach ($results as $result) {
                         $taxes = $this->model_extension_report_product->getTax($result['order_id']);
                         
                         $tax_IGST = '';
                         $tax_CGST = '';
                         $tax_SGST = '';
-                        
+//                        echo '<pre>'; print_r($taxes); die;
                         foreach ($taxes as $tax){
                             if (strpos($tax['title'], 'CGST') !== false) {
-                                $tax_CGST = $tax['value'];
+                                $tax_CGST = str_replace('CGST', '', $tax['title']);
                             }else if(strpos($tax['title'], 'SGST') !== false){
-                                $tax_SGST = $tax['value'];
+                                $tax_SGST = str_replace('SGST', '', $tax['title']);
                             }else if(strpos($tax['title'], 'IGST') !== false){
-                                $tax_IGST = $tax['value'];
+                                $tax_IGST = str_replace('IGST', '', $tax['title']);
                             }
                         }
                         
@@ -235,6 +235,12 @@ class ControllerExtensionReportProductPurchased extends Controller {
                         $customer_name = $result['firstname'].' '.$result['lastname'];
                         $company = $result['company'];
                         $gst = $result['gst'];
+                        
+                        if(!empty($result['payment_date'])){
+                            $payment_date = date("d-M-y", strtotime($result['payment_date']));
+                        }else{
+                            $payment_date = '';
+                        }
                         
                         
                         if($result['currency_code'] == 'INR'){
@@ -287,7 +293,7 @@ class ControllerExtensionReportProductPurchased extends Controller {
                                 'total_with_tax'  => $this->currency->format(($result['price']+$result['tax'])*$result['quantity'], $this->config->get('config_currency')),
                                 'cutoff_rate'     => $cutoff_rate,
                                 'base_usd'        => $base_usd,
-                                'payment_date'    => $invoice_date,
+                                'payment_date'    => $payment_date,
                                 'part_of_inc'     => 'Yes',
                                 'transaction'     => '',
                                 'acc_name'        => $acc_name,
